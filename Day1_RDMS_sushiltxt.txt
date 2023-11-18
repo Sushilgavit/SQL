@@ -1,0 +1,219 @@
+___________________________________________________________________________RDBMS_______________________________________________________________________________________________
+ 
+11/18/2023
+
+Entity is an real world object about which you can collect info 
+Transaction is any unit of work(Insert update Delete)
+DML=Data Manipulation Language commands are not auto committed.  To save, we need to use commit command.
+To cancel changes, rollback command can be used.
+-u = paramter for user root name of deafult user
+show databases=all database;
+select database();=connected to which database;
+use databasename= use database;
+show tables;= show tabels;
+create database database name
+after that use database name
+after that create table table name
+create table tablename(a int,b varchar(100), c varchar(300));
+Desc Tablename; //gives exact schema of your table;
+show variables like 'port' =(port connected) (specific variable we use like)
+show variables shows all the variables and their values
+\q exit mysql
+mysql -hlocalhost -uroot -pAmar@1234 -P3306 -Damar = "used to connect to a specific database"
+-h localhost: Specifies the host (localhost in this case).
+-u root: Specifies the username (root in this case).
+-p: Prompts you for the password. After entering this command, you will be prompted to enter the password.
+-P 3306: Specifies the port number (3306 in this case).
+-D amar: Specifies the database name (amar in this case).
+select * from tablename = "display data in table";where * means all columns
+select now(); = gives datetime
+current_date() = will only give me date;
+select curdate();
+select current_time(); = wiil only give only time;
+select curtime();
+
+Insert into Table_name(a,b,c) values(1,'bhau','2023-11-18');= used to insert in table;(a,b,c = column name)
+insert into Table_name values(2,'bb',current_date());= we need to declare in same sequence;
+insert into Table_name(a,b) values(3,'ch');=insert into specific colunms;
+
+select * from Table_name where a=1;
+select * from Table_name where a!=1;
+
+select * from Table_name where c!=curdate();
+select * from Table_name where c!=curtime();
+
+select * from Table_name where a>1;(you can use greater than less than and many more);
+
+select * from Table_name where c is null; // gives null row
+select * from Table_name where c is not null;//gives not null rows
+
+select * from Table_name where a in (2,3);//This query selects all rows from the specified table where the value in the column "a" is either 2 or 3
+select * from Table_name where a not in (2,3);//This query is useful for retrieving rows where the value in column "a" is not equal to 2 or 3.
+
+select * from Table_name where a between 1 and 3;//This query is useful for retrieving rows where the value in column "a" is greater than or equal to 1 and less than or equal to 3.
+select * from Table_name where a not between 1 and 3;//This query is useful for retrieving rows where the value in column "a" is less than 1 or greater than 3.
+
+update Table_name set b = "Amarnath",c='curdate()' where a=2;
+_________________Commands to roll back________________________
+start transaction;
+update Table_name set b = "Ar",c='curdate()' where a>=1;
+select * from Table_name;
+rollback;
+______________________________________________________________________________
+
+alter command cannot be roll back;
+
+Constraints in SQL are rules defined on a column or a set of columns in a table. They enforce the data integrity and reliability of the database by defining certain properties or relationships between the data. 
+
+alter table Table_name rename to Table_name;//renaming a table
+alter table Table_name modify column c4 varchar(100) default 'mayur' not null;//This command modifies the data type of the column c4 to VARCHAR(100), sets the default value to 'mayur', and //ensures that the column does not allow NULL values
+
+
+
+alter table Table_name add d int;//This command adds a new column named d with the data type INT to the existing table 
+alter table Table_name drop column d;//After executing this statement, the column d will be removed from the table Table_name. 
+alter table Table_name add c4 int default 200 not null;
+//This command adds a new column named c4 with the data type INT. The NOT NULL constraint ensures that the column cannot contain NULL values, and the DEFAULT 200 sets the default value //for the column to 200.
+
+
+create table t1_uk(c1 int unique,c2 varchar(100));//This defines a table where values in the column c1 must be unique, and c2 can hold variable-length character strings up to 100 characters.
+insert into t1_uk values(null,'a');
+create table t1_uk_multi(c1 int unique,c2 int unique,c3 varchar(50));//This defines a table where both the c1 and c2 columns must have unique values across all rows in the table. The c3 column can hold variable-length character strings up to 50 characters.
+
+create table t1_pk(c1 int primary key,c2 varchar(50));//This defines a table where the c1 column is the primary key, meaning it uniquely identifies each record in the table. The c2 column can hold variable-length character strings up to 50 characters.
+duplicate primary keys are allowed
+one table can have only one primary key
+
+create table t_cc(c1 varchar(50),c2 varchar(50),c3 varchar(50) check(c3='male' or c3 = 'female');//This statement creates a table named t_cc with three columns (c1, c2, and c3). The CHECK constraint on column c3 ensures that the value is either 'male' or 'female'.
+create table t_cc(c1 varchar(50),c2 varchar(50),c3 varchar(50) check(c3 int ('male','female'));//This corrected statement creates a table named t_cc with three columns (c1, c2, and c3). The CHECK constraint on column c3 ensures that the value is either 'male' or 'female'.
+
+ create table_nn(id int,name varchar(60) not null);//In this statement, the NOT NULL constraint is applied to the name column, indicating that a value must be provided for the name column when inserting data into this table. The id column does not have the NOT NULL constraint, so it can accept null values.
+ insert into t_nn values(1,null);//nul cannot be allowed error
+
+
+create table t_parent (depid int primary key,deptname varchar(50));
+create table t_child(eid int,ename varchar(100),depid int,foreign key fk1 (depid) references t_parent(depid));
+insert into t_child values(1,'a',1);//this line will give error because parent class depid is not defined yet
+insert into t_child values(1,'a',null);//allowed beacuse null means not defined yet
+insert into t_parent values(1,'HR');//added data in parent
+insert into t_child values(1,'a',1);//now you add data in child with same depid
+
+create table t_def(id int,salary int default 200);//create default value table
+insert into t_def value(1,null);//this will give null to salary
+insert into t_def(id) value(1);// this will give default value to salary
+
+DDL commands are auto committed...saved
+DML commands are not auto committed.  To save, we need to use commit command.
+To cancel changes, rollback command can be used.
+
+rollback is used in transaction of bank application rollback everything
+select count(*) from t1_uk;//his query counts the total number of rows in the specified table
+select count(c1) from t1_uk;//This query counts the number of non-null values in the specified column. If there are null values in the c1 column, they will not be included in the count.
+select count(distinct(c2)) from t1_uk;//This query counts the number of unique, non-null values in the specified column. If there are null values in the c2 column, they will not be 
+//considered in the count.
+
+select sum(c1) from t1_uk;//This query calculates the sum of all values in the c1 column in the t1_uk table.
+select avg(c1) from t1_uk;//This query calculates the average of the values in the column c1 of the table t1_uk. The AVG function automatically excludes NULL values from the calculation.
+select min(c1) from t1_uk;/returns minimum from c1
+select max(c1) from t1_uk;//returns maximum from c1
+select ascii('a');//returns ascii value of a
+
+*************Cross Join*********************
+ create table t1(c1 int,c2 varchar(50));
+ create table t2(c1 int,c2 varchar(50));
+ insert into t1 values(1,'a'),(2,'b'),(3,'c'),(4,'d');
+ insert into t2 values(3,'x'),(4,'y'),(5,'z'),(6,'w');
+ select * from t1,t2;
+select t1.c1,t2.c2 from t1 cross join t2;
+***********inner join*************
+Select * from t1 inner join t2 
+On t1.c1=t2.c1;
+Select * from t1  join t2 
+On t1.c1=t2.c1;//by default it takes inner join
+Select c1,c2 from t1  inner join t2 
+On t1.c1=t2.c1;//gives you ambigues error
+
+***********outer join*******************
+works with new syntax only
+It is used to display matching as well as non matching rows
+left outer join: `display matching rows from both tables. and non matching from left side table
+Select * from t1 left outer join t2 On t1.c1=t2.c1; 
+
+right outer join: it display matching rows from both tables. and non matching from right side table
+Select * from t1 right outer join t2 On t1.c1=t2.c1; 
+
+full outer join: it display matching as well as non matching rows from both tables
+
+In union and unionall unionall is faster beacause it doesnt use sorting;
+intersect-supported in mysql 8 and above versions
+
+create table a(id int);
+create table b(id int);
+insert into a values(1),(2),(3);
+insert into b values(3),(4),(5);
+select * from a union select * from b;
+select * from a union all select * from b;
+select * from a intersect select * from b;
+select * from a except select * from b;
+
+**************full join in mysql********************
+Select * from t1 left outer join t2 
+On t1.c1=t2.c1
+union
+Select * from t1 right outer join t2 
+On t1.c1=t2.c1;
+****************************************************
+
+***************corelated subquery***************************
+Select * from a where id in (select id from b);//This query returns all columns (*) from table a for rows where the id matches any of the id values retrieved from table b.
+Select * from a where id not in (select id from b);//This query returns all columns (*) from table a for rows where the id does not match any of the id values retrieved from table b. 
+*************************************************************
+create two table dep and emp
+Select sum(salary) from emp;
+ Select deptname,sum(salary)
+    -> From emp join dept
+    -> On emp.deptid=dept.deptid
+    -> group by deptname;
+
+ Select deptname,sum(salary)
+    -> From emp join dept
+    -> On emp.deptid=dept.deptid
+    -> group by deptname
+    -> having sum(salary)>50000;
+
+having clause can be used only with group by clause;
+Select ename,deptname,salary
+From emp join dept
+On emp.deptid=dept.deptid
+Order by deptname,salary desc;
+
+ Select ename,deptname,salary
+    -> From emp join dept
+    -> On emp.deptid=dept.deptid
+    -> Order by salary desc;
+
+ Select ename,deptname,salary
+    -> From emp join dept
+    -> On emp.deptid=dept.deptid
+    -> Order by salary desc limit 1;
+
+ Select ename,deptname,salary
+    -> From emp join dept
+    -> On emp.deptid=dept.deptid
+    -> Order by salary desc limit 5;
+
+ Select ename,deptname,salary
+    -> From emp join dept
+    -> On emp.deptid=dept.deptid
+    -> Order by salary desc limit 1,1;
+
+ Select ename,deptname,salary
+    -> From emp join dept
+    -> On emp.deptid=dept.deptid
+    -> Order by salary desc limit 2,1;
+
+
+Select e.mgrid,m.ename mgrname,e.eid,e.ename from emp_mgr e ,emp_mgr m
+Where 
+e.mgrid=m.eid and
+e.mgrid<>e.eid; 
