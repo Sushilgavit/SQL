@@ -1,0 +1,154 @@
+Queries:
+
+1. Display the name of all employees whose salary is between 500 and 1300
+->
+select * from emp where salary between 500 and 1300 ;
++------+-------+--------+--------+
+| eid  | ename | salary | deptid |
++------+-------+--------+--------+
+|    1 | a     |   1000 |      1 |
+|    2 | b     |   1023 |      2 |
+|    8 | h     |    523 |      2 |
+|   10 | j     |    627 |      1 |
+|   11 | k     |    978 |      3 |
+|   13 | m     |    746 |      1 |
+|   16 | p     |    821 |      3 |
+|   18 | r     |    546 |      3 |
+|   19 | s     |    717 |      2 |
+|   20 | t     |    817 |      2 |
+|   21 | u     |    888 |      3 |
+|   29 | a3    |    653 |      3 |
+|   34 | a8    |    845 |      1 |
+|   36 | b1    |   1212 |      1 |
+|   37 | b2    |   1242 |      2 |
+|   40 | b5    |    555 |      1 |
++------+-------+--------+--------+
+
+------------------------------------------------------------------
+2. Display the name of all employees who are in HR dept
+->
+select e.* ,deptName from dept d, emp e where e.DeptId= d.DeptId and DeptName="HR";
++------+-------+--------+--------+----------+
+| eid  | ename | salary | deptid | deptName |
++------+-------+--------+--------+----------+
+|    1 | a     |   1000 |      1 | HR       |
+|    5 | e     |    102 |      1 | HR       |
+|    7 | g     |    323 |      1 | HR       |
+|    9 | i     |    136 |      1 | HR       |
+|   10 | j     |    627 |      1 | HR       |
+|   12 | l     |    222 |      1 | HR       |
+|   13 | m     |    746 |      1 | HR       |
+|   14 | n     |   3223 |      1 | HR       |
+|   17 | q     |    324 |      1 | HR       |
+|   22 | v     |   9029 |      1 | HR       |
+|   24 | x     |  28222 |      1 | HR       |
+|   26 | z     |  12111 |      1 | HR       |
+|   27 | a1    |   3211 |      1 | HR       |
+|   28 | a2    |   9238 |      1 | HR       |
+|   30 | a4    |     44 |      1 | HR       |
+|   32 | a6    |     16 |      1 | HR       |
+|   34 | a8    |    845 |      1 | HR       |
+|   36 | b1    |   1212 |      1 | HR       |
+|   40 | b5    |    555 |      1 | HR       |
+|   42 | b7    |   6432 |      1 | HR       |
+|   44 | b9    |   3355 |      1 | HR       |
++------+-------+--------+--------+----------+
+21 rows in set (0.00 sec)
+
+------------------------------------------------------------------
+
+3. Display the name of all the dept and count of all the employees in that dept.
+->
+ select deptName , count(emp.ename) total_employee from emp join dept on emp.deptid=dept.deptid group by deptName;
++----------+----------------+
+| deptName | total_employee |
++----------+----------------+
+| HR       |             21 |
+| IT       |             10 |
+| Finance  |             14 |
++----------+----------------+
+
+------------------------------------------------------------------
+
+
+4. Display the name , deptname and  salary of the employee whose salary is highest.
+->
+ select ename , deptname , salary from emp join dept on emp.deptid=dept.deptid order by salary desc limit 1;
++-------+----------+--------+
+| ename | deptname | salary |
++-------+----------+--------+
+| x     | HR       |  28222 |
++-------+----------+--------+
+-----------------------------------------------------------------
+5. Display the name , deptname and  salary of the employee whose salary is lowest.
+
+->
+
+ select ename , deptname , salary from emp join dept on emp.deptid=dept.deptid order by salary limit 1;
++-------+----------+--------+
+| ename | deptname | salary |
++-------+----------+--------+
+| a5    | IT       |      3 |
++-------+----------+--------+
+-----------------------------------------------------------------
+
+6. Display the name , deptname of employee whose salary is second highest.
+
+->
+
+ select ename , deptname , salary from emp join dept on emp.deptid=dept.deptid order by salary desc limit 1 offset 1;
++-------+----------+--------+
+| ename | deptname | salary |
++-------+----------+--------+
+| w     | Finance  |  20001 |
++-------+----------+--------+
+1 row in set (0.00 sec)
+
+-----------------------------------------------------------------
+
+7. display the name, deptname of top five earning employees.
+->
+
+select ename , deptname , salary from emp join dept on emp.deptid=dept.deptid order by salary desc limit 5 ;
++-------+----------+--------+
+| ename | deptname | salary |
++-------+----------+--------+
+| x     | HR       |  28222 |
+| w     | Finance  |  20001 |
+| y     | Finance  |  19212 |
+| z     | HR       |  12111 |
+| a2    | HR       |   9238 |
++-------+----------+--------+
+----------------------------------------------------------------
+8. Display the deptname, name of top 5 earning employees from each dept.
+
+->
+9. Display the avg salary of each dept.
+
+->
+
+ select deptname,avg(salary) from emp join dept on emp.deptid=dept.deptid gro
+up by deptname;
++----------+-------------+
+| deptname | avg(salary) |
++----------+-------------+
+| HR       |   3855.8571 |
+| IT       |   1540.7000 |
+| Finance  |   3814.2143 |
++----------+-------------+
+3 rows in set (0.00 sec)
+ -------------------------------------------------------------
+10.Display the min and max salary of each dept.
+->
+
+ select deptname, min(salary) ,max(salary) from emp join dept on emp.deptid=dept.deptid group by deptname;
++----------+-------------+-------------+
+| deptname | min(salary) | max(salary) |
++----------+-------------+-------------+
+| HR       |          16 |       28222 |
+| IT       |           3 |        4532 |
+| Finance  |          23 |       20001 |
++----------+-------------+-------------+
+3 rows in set (0.00 sec)
+
+-----------------------------------------------------------------
